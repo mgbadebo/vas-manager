@@ -8,6 +8,7 @@ use App\Models\PartnerShareSummary;
 use App\Models\Service;
 use App\Models\VasRevenue;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -48,8 +49,15 @@ class DashboardController extends Controller
         $countMNOs = Mno::count();
         $countAggregators = Aggregator::count();
 
+        $driver = DB::connection()->getDriverName();
+        $dateFormatExpr = match ($driver) {
+            'sqlite' => "strftime('%Y-%m', created_at)",
+            'pgsql'  => "to_char(created_at, 'YYYY-MM')",
+            default  => "DATE_FORMAT(created_at, '%Y-%m')",
+        };
+
         $rsByMonth = PartnerShareSummary::whereIn('vas_revenue_id', $ytdRevenueIds)
-            ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as ym, SUM(rs_share_pool) as rs')
+            ->selectRaw("$dateFormatExpr as ym, SUM(rs_share_pool) as rs")
             ->groupBy('ym')
             ->orderBy('ym')
             ->get();

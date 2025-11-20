@@ -61,19 +61,19 @@
       </div>
 
       <div class="col-md-4">
-        <label class="form-label">Gross Revenue A</label>
+        <label class="form-label">Gross Revenue</label>
         <input type="number" step="0.01" name="gross_revenue_a" class="form-control" value="{{ old('gross_revenue_a') }}" required>
       </div>
 
       <div class="col-md-4">
-        <label class="form-label">Aggregator % (A%)</label>
+        <label class="form-label">Aggregator Percentage</label>
         <input type="number" step="0.0001" name="aggregator_percentage" class="form-control" value="{{ old('aggregator_percentage') }}" required>
       </div>
 
       <div class="col-md-4">
-        <label class="form-label">Aggregator Net X (auto)</label>
+        <label class="form-label">Aggregator Net (auto-calculated)</label>
         <input type="text" id="aggregator_net_x_preview" class="form-control" value="0.00" readonly>
-        <div class="form-text">Calculated as A × (1 − %A/100). Saved automatically.</div>
+        <div class="form-text">Calculated as Gross Revenue × (1 − Aggregator %/100). Saved automatically.</div>
       </div>
     </div>
 

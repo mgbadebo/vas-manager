@@ -6,39 +6,39 @@
   {{-- 3-column responsive cards --}}
   <div class="row g-3">
 
-    {{-- YTD Gross (A) --}}
+    {{-- YTD Gross Revenue --}}
     <div class="col-12 col-md-6 col-lg-4">
       <a href="{{ route('reports.revenue') }}" class="text-decoration-none text-reset">
         <div class="card shadow-sm h-100">
           <div class="card-body">
-            <div class="text-muted small">YTD Gross (A)</div>
-            <div class="h3 mt-2 mb-0">{{ number_format($A_ytd ?? 0, 2) }}</div>
+            <div class="text-muted small">YTD Gross Revenue</div>
+            <div class="h3 mt-2 mb-0">@naira($A_ytd ?? 0)</div>
             <div class="mt-2 text-primary small">View revenue report →</div>
           </div>
         </div>
       </a>
     </div>
 
-    {{-- YTD RA --}}
+    {{-- YTD Revenue After Mandatory --}}
     <div class="col-12 col-md-6 col-lg-4">
       <a href="{{ route('reports.revenue') }}#ra" class="text-decoration-none text-reset">
         <div class="card shadow-sm h-100">
           <div class="card-body">
-            <div class="text-muted small">YTD RA (After Mandatory)</div>
-            <div class="h3 mt-2 mb-0">{{ number_format($RA_ytd ?? 0, 2) }}</div>
+            <div class="text-muted small">YTD Revenue After Mandatory</div>
+            <div class="h3 mt-2 mb-0">@naira($RA_ytd ?? 0)</div>
             <div class="mt-2 text-primary small">See breakdown →</div>
           </div>
         </div>
       </a>
     </div>
 
-    {{-- YTD RS --}}
+    {{-- YTD Revenue Share Pool --}}
     <div class="col-12 col-md-6 col-lg-4">
       <a href="{{ route('reports.revenue') }}#rs" class="text-decoration-none text-reset">
         <div class="card shadow-sm h-100">
           <div class="card-body">
-            <div class="text-muted small">YTD RS (Share Pool)</div>
-            <div class="h3 mt-2 mb-0">{{ number_format($RS_ytd ?? 0, 2) }}</div>
+            <div class="text-muted small">YTD Revenue Share Pool</div>
+            <div class="h3 mt-2 mb-0">@naira($RS_ytd ?? 0)</div>
             <div class="mt-2 text-primary small">See breakdown →</div>
           </div>
         </div>
@@ -74,13 +74,13 @@
               <strong>Aggregator:</strong> {{ optional($lastRevenue->aggregator)->name }}
             </div>
             <div class="mt-2">
-              A: <strong>{{ number_format($lastRevenue->gross_revenue_a,2) }}</strong>,
-              %A: <strong>{{ number_format($lastRevenue->aggregator_percentage,2) }}%</strong>,
-              X: <strong>{{ number_format($lastRevenue->aggregator_net_x,2) }}</strong>
+              <strong>Gross Revenue:</strong> @naira($lastRevenue->gross_revenue_a ?? 0)<br>
+              <strong>Aggregator %:</strong> {{ number_format($lastRevenue->aggregator_percentage,2) }}%<br>
+              <strong>Aggregator Net:</strong> @naira($lastRevenue->aggregator_net_x ?? 0)
             </div>
             @if($lastRevenue->partnerShareSummary)
               <div class="mt-2">
-                RS: <strong>{{ number_format($lastRevenue->partnerShareSummary->rs_share_pool,2) }}</strong>
+                <strong>Revenue Share Pool:</strong> @naira(optional($lastRevenue->partnerShareSummary)->rs_share_pool ?? 0)
                 <a href="{{ route('revenue.show', $lastRevenue->id) }}" class="ms-3 small">Open record →</a>
               </div>
             @endif
@@ -95,7 +95,7 @@
     <div class="col-12">
       <div class="card shadow-sm">
         <div class="card-body">
-          <h5 class="card-title mb-3">YTD RS by Month</h5>
+          <h5 class="card-title mb-3">YTD Revenue Share Pool by Month</h5>
           <canvas id="rsByMonthChart" height="110"></canvas>
         </div>
       </div>
@@ -114,7 +114,7 @@
     type: 'line',
     data: {
       labels: labels,
-      datasets: [{ label: 'RS (Share Pool)', data: data, tension: 0.25 }]
+      datasets: [{ label: 'Revenue Share Pool', data: data, tension: 0.25 }]
     },
     options: { responsive: true, scales: { y: { beginAtZero: true } } }
   });

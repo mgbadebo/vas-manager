@@ -33,10 +33,10 @@
                                 <th>Service</th>
                                 <th>MNO</th>
                                 <th>Aggregator</th>
-                                <th>A (Gross Revenue)</th>
-                                <th>%A (Aggregator %)</th>
-                                <th>X (Aggregator Net)</th>
-                                <th>RS (Share Pool)</th>
+                                <th>Gross Revenue</th>
+                                <th>Aggregator %</th>
+                                <th>Aggregator Net</th>
+                                <th>Share Pool</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -46,12 +46,12 @@
                                     <td>{{ $item->service->name ?? 'N/A' }}</td>
                                     <td>{{ $item->mno->name ?? 'N/A' }}</td>
                                     <td>{{ $item->aggregator->name ?? 'N/A' }}</td>
-                                    <td>{{ number_format($item->gross_revenue_a, 2) }}</td>
+                                    <td>@naira($item->gross_revenue_a ?? 0)</td>
                                     <td>{{ number_format($item->aggregator_percentage, 4) }}%</td>
-                                    <td>{{ number_format($item->aggregator_net_x, 2) }}</td>
+                                    <td>@naira($item->aggregator_net_x ?? 0)</td>
                                     <td>
                                         @if($item->partnerShareSummary)
-                                            {{ number_format($item->partnerShareSummary->rs_share_pool, 2) }}
+                                            @naira($item->partnerShareSummary->rs_share_pool)
                                         @else
                                             <span class="text-muted">Not calculated</span>
                                         @endif

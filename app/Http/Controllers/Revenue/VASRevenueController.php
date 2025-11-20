@@ -4,7 +4,16 @@ namespace App\Http\Controllers\Revenue;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\{VASRevenue, Service, MNO, Aggregator};
+use App\Models\{
+    VASRevenue,
+    Service,
+    MNO,
+    Aggregator,
+    MandatoryExpenseType,
+    KeyStakeholder,
+    OperationalCategory,
+    ExpenseRecipient
+};
 use App\Services\RevenueCalculator;
 
 class VASRevenueController extends Controller
@@ -52,13 +61,28 @@ class VASRevenueController extends Controller
     public function show(int $id)
     {
         $vr = VASRevenue::with([
-            'service','mno','aggregator',
+            'service',
+            'mno',
+            'aggregator',
             'mandatoryExpenses.type',
-            'operationalExpenses',
+            'mandatoryExpenses.keyStakeholder',
+            'operationalExpenses.operationalCategory',
+            'operationalExpenses.expenseRecipient',
             'partnerShareSummary'
         ])->findOrFail($id);
 
-        return view('revenue.show', compact('vr'));
+        $mandatoryTypes = MandatoryExpenseType::orderBy('name')->get();
+        $keyStakeholders = KeyStakeholder::orderBy('name')->get();
+        $operationalCategories = OperationalCategory::orderBy('name')->get();
+        $expenseRecipients = ExpenseRecipient::with('operationalCategory')->orderBy('name')->get();
+
+        return view('revenue.show', compact(
+            'vr',
+            'mandatoryTypes',
+            'keyStakeholders',
+            'operationalCategories',
+            'expenseRecipients'
+        ));
     }
 
     public function update(Request $r, int $id, RevenueCalculator $calc)
