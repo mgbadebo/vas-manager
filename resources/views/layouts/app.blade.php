@@ -28,6 +28,7 @@
           <li class="nav-item"><a class="nav-link" href="{{ route('reports.services') }}">Services</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('reports.mnos') }}">MNOs</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('reports.aggregators') }}">Aggregators</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ route('admin.settings.index') }}">Admin Settings</a></li>
         </ul>
 
         {{-- Right side auth --}}

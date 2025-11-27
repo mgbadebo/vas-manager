@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('reports.revenue')" :active="request()->routeIs('reports.revenue')">
                         {{ __('Revenue Report') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">
+                        {{ __('Admin Settings') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -75,6 +78,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('reports.revenue')" :active="request()->routeIs('reports.revenue')">
                 {{ __('Revenue Report') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">
+                {{ __('Admin Settings') }}
             </x-responsive-nav-link>
         </div>
 

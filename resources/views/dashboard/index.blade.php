@@ -1,7 +1,10 @@
 @extends('layouts.bootstrap')
 
 @section('content')
-  <h1 class="h3 mb-4">Dashboard</h1>
+  <div class="mb-4">
+    <h1 class="h3 mb-1 fw-bold">Dashboard</h1>
+    <p class="text-muted mb-0 small">Overview of your VAS revenue and operations</p>
+  </div>
 
   {{-- 3-column responsive cards --}}
   <div class="row g-3">
@@ -9,10 +12,13 @@
     {{-- YTD Gross Revenue --}}
     <div class="col-12 col-md-6 col-lg-4">
       <a href="{{ route('reports.revenue') }}" class="text-decoration-none text-reset">
-        <div class="card shadow-sm h-100">
+        <div class="card shadow-sm border-0 h-100">
           <div class="card-body">
-            <div class="text-muted small">YTD Gross Revenue</div>
-            <div class="h3 mt-2 mb-0">@naira($A_ytd ?? 0)</div>
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="text-muted small fw-medium">YTD Gross Revenue</div>
+              <i class="bi bi-graph-up-arrow text-primary fs-4"></i>
+            </div>
+            <div class="h3 mt-2 mb-0 fw-bold text-primary">@naira($A_ytd ?? 0)</div>
             <div class="mt-2 text-primary small">View revenue report →</div>
           </div>
         </div>
@@ -22,10 +28,13 @@
     {{-- YTD Revenue After Mandatory --}}
     <div class="col-12 col-md-6 col-lg-4">
       <a href="{{ route('reports.revenue') }}#ra" class="text-decoration-none text-reset">
-        <div class="card shadow-sm h-100">
+        <div class="card shadow-sm border-0 h-100">
           <div class="card-body">
-            <div class="text-muted small">YTD Revenue After Mandatory</div>
-            <div class="h3 mt-2 mb-0">@naira($RA_ytd ?? 0)</div>
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="text-muted small fw-medium">YTD Revenue After Mandatory</div>
+              <i class="bi bi-cash-coin text-info fs-4"></i>
+            </div>
+            <div class="h3 mt-2 mb-0 fw-bold text-info">@naira($RA_ytd ?? 0)</div>
             <div class="mt-2 text-primary small">See breakdown →</div>
           </div>
         </div>
@@ -35,10 +44,13 @@
     {{-- YTD Revenue Share Pool --}}
     <div class="col-12 col-md-6 col-lg-4">
       <a href="{{ route('reports.revenue') }}#rs" class="text-decoration-none text-reset">
-        <div class="card shadow-sm h-100">
+        <div class="card shadow-sm border-0 h-100">
           <div class="card-body">
-            <div class="text-muted small">YTD Revenue Share Pool</div>
-            <div class="h3 mt-2 mb-0">@naira($RS_ytd ?? 0)</div>
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="text-muted small fw-medium">YTD Revenue Share Pool</div>
+              <i class="bi bi-piggy-bank text-success fs-4"></i>
+            </div>
+            <div class="h3 mt-2 mb-0 fw-bold text-success">@naira($RS_ytd ?? 0)</div>
             <div class="mt-2 text-primary small">See breakdown →</div>
           </div>
         </div>

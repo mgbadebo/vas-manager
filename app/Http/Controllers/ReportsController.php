@@ -50,7 +50,7 @@ class ReportsController extends Controller
 
     public function services()
     {
-        $rows = Service::orderBy('name')->get();
+        $rows = Service::with('serviceType')->orderBy('name')->get();
         return view('reports.services', compact('rows'));
     }
 

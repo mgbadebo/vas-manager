@@ -30,7 +30,6 @@ class StoreMandatoryExpenseRequest extends FormRequest
     {
         return [
             'mandatory_expense_type_id' => 'required|exists:mandatory_expense_types,id',
-            'key_stakeholder_id'        => 'nullable|exists:key_stakeholders,id',
             'percentage'                => 'nullable|numeric|min:0|max:1000',
             'fixed_amount'              => 'nullable|numeric|min:0',
         ];

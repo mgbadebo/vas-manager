@@ -7,9 +7,14 @@
     $operationalErrors = $errors->getBag('operationalExpense');
 @endphp
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h4">VAS Revenue Details</h1>
-    <a href="{{ route('revenue.index') }}" class="btn btn-outline-secondary">Back to List</a>
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+    <div>
+        <h1 class="h3 mb-1 fw-bold">VAS Revenue Details</h1>
+        <p class="text-muted mb-0 small">View and manage revenue entry information</p>
+    </div>
+    <a href="{{ route('revenue.index') }}" class="btn btn-outline-secondary w-100 w-md-auto">
+        <i class="bi bi-arrow-left"></i> Back to List
+    </a>
 </div>
 
 @if(session('ok'))
@@ -28,70 +33,88 @@
 
 <div class="row">
     <div class="col-md-8">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Revenue Information</h5>
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-white border-bottom">
+                <h5 class="card-title mb-0 fw-semibold">
+                    <i class="bi bi-receipt text-primary"></i> Revenue Information
+                </h5>
             </div>
             <div class="card-body">
-                <dl class="row">
-                    <dt class="col-sm-4">Service:</dt>
-                    <dd class="col-sm-8">{{ $vr->service->name ?? 'N/A' }} @if($vr->service && $vr->service->type)({{ $vr->service->type }})@endif</dd>
+                <dl class="row mb-0">
+                    <dt class="col-sm-4 text-muted fw-normal">Service:</dt>
+                    <dd class="col-sm-8 mb-2">{{ $vr->service->name ?? 'N/A' }} @if($vr->service && $vr->service->serviceType)<span class="badge bg-primary-subtle text-primary ms-2">{{ $vr->service->serviceType->name }}</span>@endif</dd>
 
-                    <dt class="col-sm-4">MNO:</dt>
-                    <dd class="col-sm-8">{{ $vr->mno->name ?? 'N/A' }}</dd>
+                    <dt class="col-sm-4 text-muted fw-normal">MNO:</dt>
+                    <dd class="col-sm-8 mb-2">{{ $vr->mno->name ?? 'N/A' }}</dd>
 
-                    <dt class="col-sm-4">Aggregator:</dt>
-                    <dd class="col-sm-8">{{ $vr->aggregator->name ?? 'N/A' }} @if($vr->aggregator && $vr->aggregator->short_code)({{ $vr->aggregator->short_code }})@endif</dd>
+                    <dt class="col-sm-4 text-muted fw-normal">Aggregator:</dt>
+                    <dd class="col-sm-8 mb-2">{{ $vr->aggregator->name ?? 'N/A' }} @if($vr->aggregator && $vr->aggregator->short_code)<span class="badge bg-secondary-subtle text-secondary ms-2">{{ $vr->aggregator->short_code }}</span>@endif</dd>
 
-                    <dt class="col-sm-4">Payment Date:</dt>
-                    <dd class="col-sm-8">{{ $vr->payment_date ? $vr->payment_date->format('Y-m-d') : 'N/A' }}</dd>
+                    <dt class="col-sm-4 text-muted fw-normal">Payment Date:</dt>
+                    <dd class="col-sm-8 mb-2">{{ $vr->payment_date ? $vr->payment_date->format('Y-m-d') : 'N/A' }}</dd>
 
-                    <dt class="col-sm-4">Period Label:</dt>
-                    <dd class="col-sm-8">{{ $vr->period_label ?? 'N/A' }}</dd>
+                    <dt class="col-sm-4 text-muted fw-normal">Payment Period:</dt>
+                    <dd class="col-sm-8 mb-2">
+                        @if($vr->payment_period_month && $vr->payment_period_year)
+                            {{ \Carbon\Carbon::create($vr->payment_period_year, $vr->payment_period_month)->format('F Y') }}
+                        @else
+                            N/A
+                        @endif
+                    </dd>
 
-                    <dt class="col-sm-4">Gross Revenue:</dt>
-                    <dd class="col-sm-8"><strong>@naira($vr->gross_revenue_a ?? 0)</strong></dd>
+                    <dt class="col-sm-4 text-muted fw-normal">Bank:</dt>
+                    <dd class="col-sm-8 mb-2">{{ $vr->bank->name ?? 'N/A' }}</dd>
 
-                    <dt class="col-sm-4">Aggregator Percentage:</dt>
-                    <dd class="col-sm-8"><strong>{{ number_format($vr->aggregator_percentage, 4) }}%</strong></dd>
+                    <dt class="col-sm-4 text-muted fw-normal">Period Label:</dt>
+                    <dd class="col-sm-8 mb-2">{{ $vr->period_label ?? 'N/A' }}</dd>
 
-                    <dt class="col-sm-4">Aggregator Net:</dt>
-                    <dd class="col-sm-8"><strong>@naira($vr->aggregator_net_x ?? 0)</strong></dd>
+                    <hr class="my-2">
+
+                    <dt class="col-sm-4 text-muted fw-normal">Gross Revenue:</dt>
+                    <dd class="col-sm-8 mb-2"><strong class="text-primary fs-5">@naira($vr->gross_revenue_a ?? 0)</strong></dd>
+
+                    <dt class="col-sm-4 text-muted fw-normal">Aggregator Percentage:</dt>
+                    <dd class="col-sm-8 mb-2"><strong>{{ number_format($vr->aggregator_percentage, 4) }}%</strong></dd>
+
+                    <dt class="col-sm-4 text-muted fw-normal">Aggregator Net:</dt>
+                    <dd class="col-sm-8 mb-2"><strong class="text-success">@naira($vr->aggregator_net_x ?? 0)</strong></dd>
                 </dl>
             </div>
         </div>
     </div>
 
     <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Summary</h5>
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-white border-bottom">
+                <h5 class="card-title mb-0 fw-semibold">
+                    <i class="bi bi-calculator text-success"></i> Summary
+                </h5>
             </div>
             <div class="card-body">
                 @if($summary)
                     <dl class="row mb-0">
-                        <dt class="col-sm-6">Mandatory Expenses (ME):</dt>
-                        <dd class="col-sm-6 text-end"><strong>@naira($summary->mandatory_total_me ?? 0)</strong></dd>
+                        <dt class="col-sm-6 text-muted fw-normal small">Mandatory Expenses (ME):</dt>
+                        <dd class="col-sm-6 text-end mb-2"><strong>@naira($summary->mandatory_total_me ?? 0)</strong></dd>
 
-                        <dt class="col-sm-6">Revenue After Mandatory:</dt>
-                        <dd class="col-sm-6 text-end"><strong>@naira($summary->ra_after_mandatory ?? 0)</strong></dd>
+                        <dt class="col-sm-6 text-muted fw-normal small">Revenue After Mandatory:</dt>
+                        <dd class="col-sm-6 text-end mb-2"><strong class="text-info">@naira($summary->ra_after_mandatory ?? 0)</strong></dd>
 
-                        <dt class="col-sm-6">Operational Expenses:</dt>
-                        <dd class="col-sm-6 text-end"><strong>@naira($summary->operational_total_oe ?? 0)</strong></dd>
+                        <dt class="col-sm-6 text-muted fw-normal small">Operational Expenses:</dt>
+                        <dd class="col-sm-6 text-end mb-2"><strong>@naira($summary->operational_total_oe ?? 0)</strong></dd>
 
-                        <dt class="col-sm-6">Revenue Share Pool:</dt>
-                        <dd class="col-sm-6 text-end"><strong class="text-primary">@naira($summary->rs_share_pool ?? 0)</strong></dd>
+                        <dt class="col-sm-6 text-muted fw-normal small">Revenue Share Pool:</dt>
+                        <dd class="col-sm-6 text-end mb-2"><strong class="text-primary fs-5">@naira($summary->rs_share_pool ?? 0)</strong></dd>
 
-                        <hr class="my-2">
+                        <hr class="my-3">
 
-                        <dt class="col-sm-6">DR Share (50%):</dt>
-                        <dd class="col-sm-6 text-end"><strong>@naira($summary->dr_share_50 ?? 0)</strong></dd>
+                        <dt class="col-sm-6 text-muted fw-normal small">DR Share:</dt>
+                        <dd class="col-sm-6 text-end mb-2"><strong class="share-amount text-success" data-amount="{{ $summary->dr_share_50 ?? 0 }}">*****</strong></dd>
 
-                        <dt class="col-sm-6">AJ Share (30%):</dt>
-                        <dd class="col-sm-6 text-end"><strong>@naira($summary->aj_share_30 ?? 0)</strong></dd>
+                        <dt class="col-sm-6 text-muted fw-normal small">AJ Share:</dt>
+                        <dd class="col-sm-6 text-end mb-2"><strong class="share-amount text-success" data-amount="{{ $summary->aj_share_30 ?? 0 }}">*****</strong></dd>
 
-                        <dt class="col-sm-6">TJ Share (20%):</dt>
-                        <dd class="col-sm-6 text-end"><strong>@naira($summary->tj_share_20 ?? 0)</strong></dd>
+                        <dt class="col-sm-6 text-muted fw-normal small">TJ Share:</dt>
+                        <dd class="col-sm-6 text-end mb-2"><strong class="share-amount text-success" data-amount="{{ $summary->tj_share_20 ?? 0 }}">*****</strong></dd>
 
                         @if($summary->computed_on)
                             <dt class="col-sm-12 mt-2">
@@ -107,25 +130,35 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('revenue.recompute', $vr->id) }}">
-            @csrf
-            <button type="submit" class="btn {{ $summary ? 'btn-outline-primary' : 'btn-primary' }} w-100">
-                {{ $summary ? 'Recalculate Summary' : 'Calculate Summary' }}
-            </button>
-        </form>
+        <div class="d-flex flex-column flex-md-row gap-2">
+            <form method="POST" action="{{ route('revenue.recompute', $vr->id) }}" class="flex-fill">
+                @csrf
+                <button type="submit" class="btn {{ $summary ? 'btn-outline-primary' : 'btn-primary' }} w-100">
+                    <i class="bi bi-arrow-clockwise"></i> <span class="d-none d-sm-inline">{{ $summary ? 'Recalculate Summary' : 'Calculate Summary' }}</span><span class="d-sm-none">{{ $summary ? 'Recalculate' : 'Calculate' }}</span>
+                </button>
+            </form>
+            
+            @if($summary)
+                <button type="button" class="btn btn-outline-secondary flex-fill" id="toggleShareButton">
+                    <i class="bi bi-eye"></i> <span class="d-none d-sm-inline">Show Share</span><span class="d-sm-none">Show</span>
+                </button>
+            @endif
+        </div>
     </div>
 </div>
 
 <div class="row mt-4">
     <div class="col-md-6">
-        <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Mandatory Expenses</h5>
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0 fw-semibold">
+                    <i class="bi bi-exclamation-triangle text-warning"></i> Mandatory Expenses
+                </h5>
             </div>
             <div class="card-body">
                 <form class="row g-3 mb-3" method="POST" action="{{ route('mandatory-expenses.store', $vr) }}">
                     @csrf
-                    <div class="col-md-6">
+                    <div class="col-12 col-md-4">
                         <label class="form-label">Type</label>
                         <select name="mandatory_expense_type_id" class="form-select @error('mandatory_expense_type_id','mandatoryExpense') is-invalid @enderror">
                             <option value="">-- select --</option>
@@ -137,21 +170,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Key Stakeholder (optional)</label>
-                        <select name="key_stakeholder_id" class="form-select @error('key_stakeholder_id','mandatoryExpense') is-invalid @enderror">
-                            <option value="">-- none --</option>
-                            @foreach($keyStakeholders as $stakeholder)
-                                <option value="{{ $stakeholder->id }}" @selected($mandatoryErrors->any() && (int) old('key_stakeholder_id') === $stakeholder->id)>
-                                    {{ $stakeholder->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('key_stakeholder_id','mandatoryExpense')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-4">
+                    <div class="col-12 col-md-4">
                         <label class="form-label">Percentage (%)</label>
                         <input type="number" step="0.0001" id="mandatory_percentage" name="percentage" data-toggle-pair="mandatory_fixed_amount" class="form-control @error('percentage','mandatoryExpense') is-invalid @enderror"
                             value="{{ $mandatoryErrors->any() ? old('percentage') : '' }}">
@@ -159,7 +178,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-12 col-md-4">
                         <label class="form-label">Fixed Amount</label>
                         <input type="number" step="0.01" id="mandatory_fixed_amount" name="fixed_amount" data-toggle-pair="mandatory_percentage" class="form-control @error('fixed_amount','mandatoryExpense') is-invalid @enderror"
                             value="{{ $mandatoryErrors->any() ? old('fixed_amount') : '' }}">
@@ -167,7 +186,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-4 d-flex align-items-end">
+                    <div class="col-12 col-md-4 d-flex align-items-end">
                         <button class="btn btn-primary w-100">
                             <i class="bi bi-plus-circle"></i> Add Expense
                         </button>
@@ -178,21 +197,39 @@
                 </form>
 
                 <div class="table-responsive">
-                    <table class="table table-sm">
-                        <thead>
+                    <table class="table table-sm table-hover align-middle">
+                        <thead class="table-light">
                             <tr>
                                 <th>Type</th>
-                                <th>Stakeholder</th>
                                 <th>Percentage</th>
                                 <th>Fixed Amount</th>
+                                <th>Value</th>
                                 <th class="text-end">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($vr->mandatoryExpenses as $expense)
+                                @php
+                                    $value = 0;
+                                    if ($expense->fixed_amount !== null) {
+                                        $value = $expense->fixed_amount;
+                                    } elseif ($expense->type && $expense->percentage !== null) {
+                                        $base = 0;
+                                        $ruleType = $expense->type->rule_type;
+                                        
+                                        if ($ruleType === 'Percent_of_X') {
+                                            $base = $vr->aggregator_net_x ?? 0;
+                                        } elseif ($ruleType === 'Percent_of_RA' && $summary) {
+                                            $base = $summary->ra_after_mandatory ?? 0;
+                                        } elseif ($ruleType === 'Percent_of_RS' && $summary) {
+                                            $base = $summary->rs_share_pool ?? 0;
+                                        }
+                                        
+                                        $value = $base * ($expense->percentage / 100);
+                                    }
+                                @endphp
                                 <tr>
                                     <td>{{ $expense->type->name ?? 'N/A' }}</td>
-                                    <td>{{ $expense->keyStakeholder->name ?? 'N/A' }}</td>
                                     <td>{{ $expense->percentage ? number_format($expense->percentage, 4) . '%' : '—' }}</td>
                                     <td>
                                         @if($expense->fixed_amount)
@@ -201,11 +238,14 @@
                                             —
                                         @endif
                                     </td>
+                                    <td>@naira($value)</td>
                                     <td class="text-end">
-                                        <form method="POST" action="{{ route('mandatory-expenses.destroy', [$vr, $expense]) }}" onsubmit="return confirm('Remove this expense?');">
+                                        <form method="POST" action="{{ route('mandatory-expenses.destroy', [$vr, $expense]) }}" onsubmit="return confirm('Remove this expense?');" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-link text-danger p-0"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger" type="submit" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
@@ -219,7 +259,8 @@
                             <tfoot>
                                 <tr class="table-secondary">
                                     <th colspan="3">Total ME (Summary)</th>
-                                    <th colspan="2">@naira($summary->mandatory_total_me ?? 0)</th>
+                                    <th>@naira($summary->mandatory_total_me ?? 0)</th>
+                                    <th></th>
                                 </tr>
                             </tfoot>
                         @endif
@@ -237,7 +278,7 @@
             <div class="card-body">
                 <form class="row g-3 mb-3" method="POST" action="{{ route('operational-expenses.store', $vr) }}">
                     @csrf
-                    <div class="col-md-6">
+                    <div class="col-12 col-md-6">
                         <label class="form-label">Category</label>
                         <select name="operational_category_id" class="form-select @error('operational_category_id','operationalExpense') is-invalid @enderror">
                             <option value="">-- select --</option>
@@ -249,7 +290,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-12 col-md-6">
                         <label class="form-label">Recipient</label>
                         <div class="input-group">
                             <select name="expense_recipient_id" id="expense_recipient_id" class="form-select @error('expense_recipient_id','operationalExpense') is-invalid @enderror">
@@ -257,14 +298,14 @@
                                 <option value="misc">Misc</option>
                             </select>
                             <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addRecipientModal">
-                                <i class="bi bi-plus-circle"></i> Add New
+                                <i class="bi bi-plus-circle"></i> <span class="d-none d-sm-inline">Add New</span>
                             </button>
                         </div>
                         @error('expense_recipient_id','operationalExpense')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-12 col-md-4">
                         <label class="form-label">Percentage (%)</label>
                         <input type="number" step="0.0001" id="operational_percentage" name="percentage" data-toggle-pair="operational_fixed_amount" class="form-control @error('percentage','operationalExpense') is-invalid @enderror"
                             value="{{ $operationalErrors->any() ? old('percentage') : '' }}">
@@ -272,7 +313,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-12 col-md-4">
                         <label class="form-label">Fixed Amount</label>
                         <input type="number" step="0.01" id="operational_fixed_amount" name="fixed_amount" data-toggle-pair="operational_percentage" class="form-control @error('fixed_amount','operationalExpense') is-invalid @enderror"
                             value="{{ $operationalErrors->any() ? old('fixed_amount') : '' }}">
@@ -280,7 +321,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-4 d-flex align-items-end">
+                    <div class="col-12 col-md-4 d-flex align-items-end">
                         <button class="btn btn-primary w-100">
                             <i class="bi bi-plus-circle"></i> Add Expense
                         </button>
@@ -291,18 +332,28 @@
                 </form>
 
                 <div class="table-responsive">
-                    <table class="table table-sm">
-                        <thead>
+                    <table class="table table-sm table-hover align-middle">
+                        <thead class="table-light">
                             <tr>
                                 <th>Category</th>
                                 <th>Recipient</th>
                                 <th>Percentage</th>
                                 <th>Fixed Amount</th>
+                                <th>Value</th>
                                 <th class="text-end">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($vr->operationalExpenses as $expense)
+                                @php
+                                    $value = 0;
+                                    if ($expense->fixed_amount !== null) {
+                                        $value = $expense->fixed_amount;
+                                    } elseif ($expense->percentage !== null && $summary) {
+                                        $base = $summary->ra_after_mandatory ?? 0;
+                                        $value = $base * ($expense->percentage / 100);
+                                    }
+                                @endphp
                                 <tr>
                                     <td>{{ $expense->operationalCategory->name ?? 'N/A' }}</td>
                                     <td>{{ $expense->expenseRecipient->name ?? 'Misc' }}</td>
@@ -314,25 +365,29 @@
                                             —
                                         @endif
                                     </td>
+                                    <td>@naira($value)</td>
                                     <td class="text-end">
-                                        <form method="POST" action="{{ route('operational-expenses.destroy', [$vr, $expense]) }}" onsubmit="return confirm('Remove this expense?');">
+                                        <form method="POST" action="{{ route('operational-expenses.destroy', [$vr, $expense]) }}" onsubmit="return confirm('Remove this expense?');" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-link text-danger p-0"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger" type="submit" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-muted text-center">No operational expenses recorded.</td>
+                                    <td colspan="6" class="text-muted text-center">No operational expenses recorded.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                         @if($summary)
                             <tfoot>
                                 <tr class="table-secondary">
-                                    <th colspan="3">Total OE (Summary)</th>
-                                    <th colspan="2">@naira($summary->operational_total_oe ?? 0)</th>
+                                    <th colspan="4">Total OE (Summary)</th>
+                                    <th>@naira($summary->operational_total_oe ?? 0)</th>
+                                    <th></th>
                                 </tr>
                             </tfoot>
                         @endif
@@ -528,6 +583,38 @@
 
     setupMutualExclusion('mandatory_percentage', 'mandatory_fixed_amount');
     setupMutualExclusion('operational_percentage', 'operational_fixed_amount');
+
+    // Toggle share visibility
+    const toggleShareButton = document.getElementById('toggleShareButton');
+    if (toggleShareButton) {
+        const shareAmounts = document.querySelectorAll('.share-amount');
+        let sharesHidden = true; // Start with shares hidden
+
+        // Store original formatted amounts on page load
+        shareAmounts.forEach(function(element) {
+            const amount = parseFloat(element.dataset.amount) || 0;
+            // Format as Naira (matching the @naira directive format)
+            const formatted = '₦' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            element.dataset.originalContent = formatted;
+        });
+
+        toggleShareButton.addEventListener('click', function() {
+            sharesHidden = !sharesHidden;
+            
+            shareAmounts.forEach(function(element) {
+                if (sharesHidden) {
+                    // Show asterisks
+                    element.innerHTML = '*****';
+                } else {
+                    // Restore original content
+                    element.innerHTML = element.dataset.originalContent;
+                }
+            });
+
+            // Toggle button text
+            toggleShareButton.textContent = sharesHidden ? 'Show Share' : 'Hide Share';
+        });
+    }
 })();
 </script>
 @endpush

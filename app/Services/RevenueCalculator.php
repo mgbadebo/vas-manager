@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\PartnerShareSummary;
 use App\Models\VasRevenue;
+use App\Services\PaymentItemGenerator;
 
 class RevenueCalculator
 {
@@ -72,10 +73,10 @@ class RevenueCalculator
         // RS = RA - OE
         $RS = $RA - $OE;
 
-        // Split RS by env defaults
-        $splitDR = (int) env('RS_SPLIT_DR', 50);
-        $splitAJ = (int) env('RS_SPLIT_AJ', 30);
-        $splitTJ = (int) env('RS_SPLIT_TJ', 20);
+        // Split RS using service-specific configuration or defaults
+        $splitDR = (float) ($vasRevenue->dr_share_pct ?? env('RS_SPLIT_DR', 50));
+        $splitAJ = (float) ($vasRevenue->aj_share_pct ?? env('RS_SPLIT_AJ', 30));
+        $splitTJ = (float) ($vasRevenue->tj_share_pct ?? env('RS_SPLIT_TJ', 20));
 
         $drShare = $RS * ($splitDR / 100);
         $ajShare = $RS * ($splitAJ / 100);
@@ -95,6 +96,10 @@ class RevenueCalculator
                 'computed_on' => now(),
             ]
         );
+
+        // Generate payment items
+        $generator = app(PaymentItemGenerator::class);
+        $generator->generateForRevenue($vasRevenue);
 
         return $partnerShareSummary;
     }
