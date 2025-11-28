@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOperationalExpenseRequest;
 use App\Models\OperationalExpense;
-use App\Models\VASRevenue;
+use App\Models\VasRevenue;
 use App\Services\RevenueCalculator;
 
 class OperationalExpenseController extends Controller
 {
-    public function store(StoreOperationalExpenseRequest $request, VASRevenue $vasRevenue, RevenueCalculator $calculator)
+    public function store(StoreOperationalExpenseRequest $request, VasRevenue $vasRevenue, RevenueCalculator $calculator)
     {
         $data = $request->validated();
         $data['final_amount'] = $data['fixed_amount'] ?? 0;
@@ -23,7 +23,7 @@ class OperationalExpenseController extends Controller
             ->with('ok', 'Operational expense added.');
     }
 
-    public function destroy(VASRevenue $vasRevenue, OperationalExpense $operationalExpense, RevenueCalculator $calculator)
+    public function destroy(VasRevenue $vasRevenue, OperationalExpense $operationalExpense, RevenueCalculator $calculator)
     {
         abort_if($operationalExpense->vas_revenue_id !== $vasRevenue->id, 404);
 

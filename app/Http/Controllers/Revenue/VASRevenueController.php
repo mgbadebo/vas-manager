@@ -9,11 +9,11 @@ use App\Models\{
     ExpenseRecipient,
     KeyStakeholder,
     MandatoryExpenseType,
-    MNO,
+    Mno,
     OperationalCategory,
     Service,
     ServicePartnerShare,
-    VASRevenue
+    VasRevenue
 };
 use App\Services\RevenueCalculator;
 use Illuminate\Http\Request;
@@ -23,7 +23,7 @@ class VASRevenueController extends Controller
 {
     public function index()
     {
-        $items = VASRevenue::with(['service','mno','aggregator','partnerShareSummary','bank'])
+        $items = VasRevenue::with(['service','mno','aggregator','partnerShareSummary','bank'])
             ->latest('payment_date')->latest('id')->paginate(20);
 
         return view('revenue.index', compact('items'));
@@ -33,7 +33,7 @@ class VASRevenueController extends Controller
     {
         // Load options for selects
         $services    = Service::orderBy('name')->pluck('name','id');
-        $mnos        = MNO::orderBy('name')->pluck('name','id');
+        $mnos        = Mno::orderBy('name')->pluck('name','id');
         $aggregators = Aggregator::orderBy('name')->pluck('name','id');
         $banks       = Bank::orderBy('name')->pluck('name','id');
 
@@ -64,7 +64,7 @@ class VASRevenueController extends Controller
         $data['aj_share_pct'] = $share['aj_share_pct'];
         $data['tj_share_pct'] = $share['tj_share_pct'];
 
-        $vr = VASRevenue::create($data);
+        $vr = VasRevenue::create($data);
 
         // compute summary
         $calc->recompute($vr->id);
@@ -74,7 +74,7 @@ class VASRevenueController extends Controller
 
     public function show(int $id)
     {
-        $vr = VASRevenue::with([
+        $vr = VasRevenue::with([
             'service',
             'mno',
             'aggregator',
@@ -99,7 +99,7 @@ class VASRevenueController extends Controller
 
     public function update(Request $r, int $id, RevenueCalculator $calc)
     {
-        $vr = VASRevenue::findOrFail($id);
+        $vr = VasRevenue::findOrFail($id);
 
         $data = $r->validate([
             'service_id'            => 'required|exists:services,id',

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Models\{VASRevenue, Aggregator, MNO, Service, PartnerShareSummary};
+use App\Models\{VasRevenue, Aggregator, Mno, Service, PartnerShareSummary};
 
 class ReportsController extends Controller
 {
@@ -41,7 +41,7 @@ class ReportsController extends Controller
                          COALESCE(SUM(ps.rs_share_pool),0) as RS')
             ->groupBy('s.name')->orderByDesc('A')->get();
 
-        $list = VASRevenue::with(['service','mno','aggregator','partnerShareSummary'])
+        $list = VasRevenue::with(['service','mno','aggregator','partnerShareSummary'])
             ->whereBetween('payment_date', [$start, $end])
             ->orderByDesc('payment_date')->paginate(25);
 
@@ -56,7 +56,7 @@ class ReportsController extends Controller
 
     public function mnos()
     {
-        $rows = MNO::orderBy('name')->get();
+        $rows = Mno::orderBy('name')->get();
         return view('reports.mnos', compact('rows'));
     }
 

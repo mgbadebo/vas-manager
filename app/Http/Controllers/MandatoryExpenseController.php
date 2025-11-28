@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMandatoryExpenseRequest;
 use App\Models\MandatoryExpense;
-use App\Models\VASRevenue;
+use App\Models\VasRevenue;
 use App\Services\RevenueCalculator;
 
 class MandatoryExpenseController extends Controller
 {
-    public function store(StoreMandatoryExpenseRequest $request, VASRevenue $vasRevenue, RevenueCalculator $calculator)
+    public function store(StoreMandatoryExpenseRequest $request, VasRevenue $vasRevenue, RevenueCalculator $calculator)
     {
         $data = $request->validated();
         $data['final_amount'] = $data['fixed_amount'] ?? 0;
@@ -23,7 +23,7 @@ class MandatoryExpenseController extends Controller
             ->with('ok', 'Mandatory expense added.');
     }
 
-    public function destroy(VASRevenue $vasRevenue, MandatoryExpense $mandatoryExpense, RevenueCalculator $calculator)
+    public function destroy(VasRevenue $vasRevenue, MandatoryExpense $mandatoryExpense, RevenueCalculator $calculator)
     {
         abort_if($mandatoryExpense->vas_revenue_id !== $vasRevenue->id, 404);
 
